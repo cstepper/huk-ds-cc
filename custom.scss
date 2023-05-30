@@ -1,0 +1,21 @@
+/*-- scss:rules --*/
+
+/* Cell output ------------------------------------------------ */
+
+.cell-output-stdout {
+  background-color: rgb(233 236 239 / 35%);
+  border: 1px solid rgb(233 236 239 / 35%);
+  border-radius: 0.25rem;
+}
+
+.cell-output-stderr {
+  background-color: rgb(253 177 177 / 35%);
+  border: 1px solid rgb(253 177 177 / 35%);
+  border-radius: 0.25rem;
+}
+
+.cell-output-error {
+  background-color: rgb(253 177 177 / 35%);
+  border: 1px solid rgb(253 177 177 / 35%);
+  border-radius: 0.25rem;
+}

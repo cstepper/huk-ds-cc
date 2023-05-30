@@ -1,0 +1,1008 @@
+---
+title: "Motor third-part liability"
+subtitle: "Modeling expected amount of damage"
+author: "Christoph Stepper"
+date: today
+
+format: 
+  html:
+    toc: true
+    toc-depth: 4
+    grid: 
+      body-width: 1200px
+      sidebar-width: 300px
+      margin-width: 300px
+theme: [cosmo, custom.scss]
+code-fold: show
+df-print: tibble
+# page-layout: full
+fig-cap-location: margin
+tbl-cap-location: margin
+
+filters:
+  - quarto
+  - lightbox
+lightbox: auto
+
+execute: 
+  eval: true
+editor_options:
+  chunk_output_type: console
+execute-dir: project
+engine: knitr
+# knitr:
+#   opts_chunk:
+#     collapse: true
+#     comment: "#>"
+---
+
+## Background and Task
+
+Two datasets [freMTPL2freq](https://www.openml.org/d/41214) and
+[freMTPL2sev](https://www.openml.org/d/41215) contain risk features and claims
+(numbers and amounts) for motor third-part liability policies in France.
+
+The *task* is to model the *expected amount of damage per policy holder and
+year*, using a set of risk features.
+
+## Analysis
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_knit$set(root.dir = here::here())
+```
+
+```{r}
+#| label: packages
+#| code-fold: true
+#| message: false
+#| warning: false
+
+# load required packages
+library(tidyverse)
+library(patchwork)
+library(tidymodels)
+tidymodels_prefer()
+library(DALEX)
+# library(agua)
+conflicted::conflicts_prefer(base::log10)
+conflicted::conflicts_prefer(base::`||`)
+options(dplyr.summarise.inform = FALSE)
+
+# ggplot2 theme
+theme_set(theme_bw())
+
+# h2o setup
+# agua::h2o_start()
+```
+
+### Data Import and Preparation
+
+```{r}
+#| label: download
+#| eval: false
+#| code-fold: true
+
+# just for the convenience of not having to download it on every render
+
+# files = c(
+#   freq = "https://api.openml.org/data/v1/download/20649148/freMTPL2freq.arff",
+#   sev = "https://api.openml.org/data/v1/download/20649149/freMTPL2sev.arff"
+# )
+# 
+# files |> 
+#   walk(
+#     \(x) {
+#       download.file(
+#         url = x,
+#         destfile = fs::path("data", basename(x))
+#       )
+#     }
+#   )
+```
+
+```{r}
+#| label: import
+#| message: false
+
+# risk features
+freq = foreign::read.arff("data/freMTPL2freq.arff")
+str(freq)
+
+# claim amounts
+sev = foreign::read.arff("data/freMTPL2sev.arff")
+str(sev)
+```
+
+#### Modeling Dataset
+
+By aggregating the individual claim amounts in the `sev` dataset, 
+we get the total claim amount per `IDpol`.
+
+```{r}
+#| label: aggregate-claim
+claim = sev |> 
+  group_by(IDpol) |> 
+  summarize(
+    ClaimNumber = n(),
+    ClaimAmount = sum(ClaimAmount)
+  )
+
+summary(claim)
+```
+
+We can already see from the summary, that the distribution of total claim 
+amounts is *heavily right-skewed*.
+
+```{r}
+#| label: boxplot-claimNumber-claimAmount
+#| code-fold: true
+#| fig-cap: Distribution of total claim amounts (on log10-transformed axis), splitted by number of claims.
+p_data = claim |> 
+  mutate(ClaimNumber = ordered(ClaimNumber)) |> 
+  mutate(ClaimNumber = fct_lump(ClaimNumber, n = 3, other_level = ">=4")) 
+
+p_xlabs = paste0(
+  levels(p_data$ClaimNumber), "\n(N=", table(p_data$ClaimNumber), ")"
+)
+
+p = p_data |> 
+  ggplot(aes(x = ClaimNumber, y = ClaimAmount)) +
+  geom_boxplot(varwidth = TRUE, color = "grey30") + 
+  scale_y_log10() +
+  scale_x_discrete(labels = p_xlabs) +
+  labs(x = "number of claims", y = "sum of claim amounts")
+
+p
+```
+
+The boxplot shows, that on average the claim amount increases with claim 
+numbers, but has a very large spread.
+
+Additionally, we can see, that even in the 1st group (1 claim), the distribution
+of claim amounts is heavily skewed.
+
+Next, we add the risk features to the the aggregated claim amounts and 
+compute the average height of claim amounts per exposure time 
+(defined as the response variable: `ClaimAmountExposure`)
+
+```{r}
+#| label: model-dat
+
+# join by ID and ClaimNumber (to make sure, that we only have correctly 
+# assigned claims in the analysis)
+dat = inner_join(claim, freq, by = c("IDpol", "ClaimNumber" = "ClaimNb"))
+
+# compute response and keep only relevant columns
+dat = dat |>
+  mutate(
+    ClaimAmountExposure = ClaimAmount / Exposure,
+    .after = ClaimNumber
+  ) |> 
+  select(-ClaimNumber, -ClaimAmount)
+
+str(dat)
+```
+
+### EDA
+
+#### Response
+
+First, focus on the *claim amount per exposure*, that we want to predict.
+
+```{r}
+#| label: eda-claim
+#| code-fold: true
+#| fig-cap: Claim amounts per exposure (on log10-transformed axis). (a) density plot. (c) descending ecdf in log-log.
+
+# density plot
+dens = density(log10(dat$ClaimAmountExposure))
+pks = pracma::findpeaks(dens$y, npeaks = 4, sortstr = TRUE)
+pks = 10^(dens$x[pks[, 2]])
+
+p1 = dat |>
+  # filter(ClaimAmountExposure < 5000) |>
+  ggplot(aes(x = ClaimAmountExposure)) +
+  geom_vline(xintercept = pks, linetype = "dashed", color = "grey30") +
+  geom_density(fill = "grey70", alpha = .6) +
+  scale_x_log10(labels = scales::comma)
+
+# ecdf in desc log-log
+ecdf_cae = ecdf(dat$ClaimAmountExposure)
+
+p3 = dat |> 
+  arrange(ClaimAmountExposure) |> 
+  mutate(ecdf = rev(ecdf_cae(ClaimAmountExposure))) |> 
+  ggplot(aes(x = ClaimAmountExposure, y = ecdf)) +
+  geom_step(color = "grey30") +
+  scale_x_log10(labels = scales::comma) + 
+  scale_y_log10() +
+  labs(y = "relative frequency")
+  
+p1 / p3 + plot_annotation(tag_levels = "a")
+```
+
+The two plots describing the distribution of the response values put on a 
+log10-transformed axis show the following: 
+
+1. Generally, the log-transformed data shows a bell-shaped distribution, 
+   indicating that our data are following a lognormal distribution.
+2. There is a strong emphasis at values of ~ 1200; the narrow and peaked 
+   distribution indicates an underdispersion in the data.
+3. There are some extra peaks in the distribution. This might be due to many 
+   claim amounts with a fixed payment 
+   (*maybe we should follow a non-parametric* modeling approach)
+4. The descending ECDF in log-log-scales shows that the distribution is not a 
+   power law, as we are not following a straight line. Additionally, it shows
+   the heavily tailedness shape of the distribution at the right side.
+
+Keeping this in mind, we argue for applying a *log-transformation* to the 
+outcome for modeling.
+
+(advantages: less influence of errors in predicting very high values, 
+stabilized variance; disadvantages: difficult interpretation of model 
+coefficients and performance metrics).
+
+The next figure shows a *q-q-plot* of the transformed data, indicating that 
+we now have a normally distributed response variable, with a standard deviation
+somewhat < 1.
+
+```{r}
+#| label: eda-log-claim-qq-plot
+#| code-fold: true
+#| fig-cap: Q-Q-Plot of log-transformed response variable.
+
+p_dat = dat |> mutate(ClaimAmountExposure = log10(ClaimAmountExposure))
+
+params = as.list(
+  MASS::fitdistr(p_dat$ClaimAmountExposure, densfun = "normal")$estimate
+)
+
+p_dat |> 
+  ggplot(aes(sample = ClaimAmountExposure)) + 
+  stat_qq(distribution = stats::qnorm, dparams = params, color = "grey30") + 
+  geom_abline()
+```
+
+
+#### Predictors
+
+Next, let's have a look at the different predictors.
+
+```{r}
+#| label: eda-predictors-prep
+#| code-fold: show
+#| eval: true
+
+# define predictors
+predictors = list(
+  categorical = c("Region", "VehBrand", "VehGas"),
+  ordinal = c("Area", "VehPower"),
+  numeric = c("BonusMalus", "Density", "DrivAge", "VehAge"),
+  extra = "Exposure"
+)
+
+# make sure that all features are encoded correctly and re-level if required
+dat = dat |> 
+  mutate(
+    across(predictors$categorical, factor),
+    across(predictors$ordinal, ordered),
+    across(predictors$numeric, as.integer)
+  )
+
+dat |> 
+  select(all_of(predictors$categorical)) |> 
+  map(summary)
+
+# re-level VehBrand
+dat = dat |> 
+  mutate(
+    VehBrand = fct_relevel(
+      VehBrand, 
+      \(x) paste0("B", sort(as.integer(str_remove(x, "B"))))
+    )
+  )
+```
+
+##### Distributions 
+
+Let's see how the predictors are distributed and if we should apply some 
+transformations.
+
+###### Numeric predictors
+
+```{r}
+#| label: hist-predictors-numeric
+#| fig-cap: Histograms of the numeric predictor variables.
+#| fig-height: 4
+#| code-fold: true
+
+preds_numeric = dat |> 
+  select(all_of(predictors$numeric), Exposure) 
+
+# histograms
+preds_histogram = preds_numeric |> 
+  pivot_longer(everything()) |> 
+  ggplot(aes(x = value)) +
+  geom_histogram(bins = 30L, fill = "grey30") +
+  facet_wrap(~name, scales = "free", ncol = 5)
+
+preds_histogram
+```
+
+```{r}
+#| label: qq-predictors-numeric
+#| fig-cap: Q-Q-Plots of the numeric predictor variables.
+#| fig-height: 4
+#| code-fold: true
+# qq-plots
+preds_qq = preds_numeric |> 
+  pivot_longer(everything()) |> 
+  ggplot(aes(sample = value)) +
+  geom_qq(fill = "grey40", alpha = .3) +
+  geom_qq_line() +
+  facet_wrap(~name, scales = "free", ncol = 5)
+
+preds_qq
+```
+
+```{r}
+#| label: quantiles-predictors-numeric
+#| code-fold: true
+q = c(0, .01, .05, .1, .25, .5, .75, .9, .95, .99, .999, 1)
+
+preds_numeric_quant = preds_numeric |> map(\(x) {quantile(x, probs = q)})
+preds_numeric_quant = do.call(rbind, preds_numeric_quant)
+
+kableExtra::kbl(
+  preds_numeric_quant, caption = "Quantiles of numeric predictors.",
+  digits = 3
+) |> 
+  kableExtra::kable_paper("hover")
+
+```
+
+*Findings:*
+
+- `BonusMalus`: heavily right-skewed, with almost half of the policies having the 
+  minimum value of 50, almost nothing > 150
+- `Density` heavily right-skewed, but larger share at *maximum* value (Paris?)
+- `DrivAge`: right-skewed and cut-off at *age 18* (min driver age)
+- `Exposure`: looks like mostly being full *one-year* data. Some outliers > 1
+  and some shorter-periods.
+- `VehAge`: heavily right-skewed, some outliers with values > 30.
+
+We might need to remove some outliers and apply a *log-transformation*.
+
+###### Ordinal and categorical predictors
+
+```{r}
+#| label: eda-predictors-ord-cat
+#| fig-cap: Barcharts with frequencies of the ordinal and categorical predictor variables.
+#| fig-height: 8
+#| code-fold: true
+
+preds_ord_cat = dat |> 
+  select(all_of(predictors$ordinal), all_of(predictors$categorical))
+
+preds_barchart = preds_ord_cat |> 
+  as.list() |> 
+  map(\(x) tibble(x) |> count(x) |> mutate(x = as.character(x))) |> 
+  bind_rows(.id = "name") |> 
+  mutate(x = factor(x, levels = x)) |> 
+  ggplot(aes(x = n, y = x)) +
+  geom_col(fill = "grey30") +
+  facet_wrap(name~., scales = "free", ncol = 2) + 
+  labs(x = NULL, y = NULL)
+
+preds_barchart
+```
+```{r}
+#| label: eda-predictors-area-region
+#| fig-cap: Counts of policies in Region vs. Area.
+#| code-fold: true
+preds_ord_cat |> 
+  ggplot(aes(x = Area, y = Region)) + 
+  geom_count(color = "grey30")
+```
+
+*Findings:*
+
+- `Area`: most of the policies are in the *mid*-populated areas
+- `Region` is not evenly distributed, with strong emphasis on four classes; 
+  in relationship to the `Area`, it looks like only `R11` contributes to the 
+  most densely populated `F`-Area. 
+  `R82` and `R93` have a similar pattern (with contributing most to `C`, `D`, and `E`).
+- `VehBrand`: B1 and B2 seems to be the most popular brands in France; B12 
+  is 3rd place.
+- `VehGas`: evenly distributed, no differentiation
+- `VehPower`: looks like *log-normally* distributed
+
+Maybe we can aggregate `Region` codes to less levels.
+
+##### Correlation Analysis
+
+First, check the relationships between some of the predictor variables.
+
+To get a first impression, create a correlation matrix of the numeric 
+(and ordinal) variables.
+
+```{r}
+#| label: cor-mat
+#| code-fold: true
+#| warning: false
+#| message: false
+cor_mat = dat |> 
+  select(all_of(predictors$numeric), predictors$ordinal) |> 
+  mutate(across(where(is.ordered), as.integer)) |> 
+  corrr::correlate() 
+
+cor_mat |> 
+  corrr::rearrange() |> 
+  corrr::shave() |> 
+  corrr::fashion(decimals = 3) |>
+  kableExtra::kbl(digits = 3, caption = "Pearson Correlations of numeric predictors.") |>
+  kableExtra::kable_paper("hover")
+```
+
+
+```{r}
+#| label: cor-mat-plot
+#| code-fold: true
+#| fig-cap: Correlation matrix plot of numeric (and ordinal) variables.
+cor_mat |> corrr::autoplot()
+```
+
+Some questions are:
+
+- Is `Area` just an encoding for the `Density`?
+
+```{r}
+#| label: corr-dens-area
+#| fig-cap: Population density (on log10-transformed axis), splitted for different Area codes.
+#| code-fold: true
+
+dat |> 
+  ggplot(aes(x = Density, y = Area)) + 
+  geom_boxplot(color = "grey30") + 
+  scale_x_log10()
+```
+
+
+```{r}
+#| label: corr-dens-area-2
+#| code-fold: show
+#| warning: false
+#| message: false
+with(dat, cor(as.numeric(Area), log10(Density)))
+```
+
+- How do the different variables (`Area`, `DrivAge`, `VehAge`, `VehPower`) 
+  relate to `BonusMalus`
+
+```{r}
+#| label: corr-bonusmalus
+#| fig-cap:  BonusMalus (on log10-transformed axis), splitted for different levels of Area, DrivAge, VehAge, VehPower
+#| code-fold: true
+
+p_area = dat |> 
+  ggplot(aes(x = BonusMalus, y = Area)) + 
+  geom_boxplot(color = "grey30") + 
+  scale_x_log10()
+
+p_drivage = dat |> 
+  mutate(
+    DrivAge = cut(DrivAge, breaks = c(18, seq(20, 100, by = 10)), right = FALSE)
+  ) |> 
+  ggplot(aes(x = BonusMalus, y = DrivAge)) + 
+  geom_boxplot(color = "grey30", varwidth = TRUE) + 
+  scale_x_log10()
+
+p_vehage = dat |> 
+  mutate(
+    VehAge = cut(VehAge, breaks = c(0, 2, seq(5, 25, by = 5), 100), right = FALSE)
+  ) |> 
+  ggplot(aes(x = BonusMalus, y = VehAge)) + 
+  geom_boxplot(color = "grey30", varwidth = TRUE) + 
+  scale_x_log10()
+
+p_vehpower = dat |> 
+  ggplot(aes(x = BonusMalus, y = VehPower)) + 
+  geom_boxplot(color = "grey30", varwidth = TRUE) + 
+  scale_x_log10()
+
+(p_area / p_drivage) | (p_vehage / p_vehpower)
+```
+
+
+```{r}
+#| label: corr-bonusmalus-2
+#| code-fold: show
+#| message: false
+#| warning: false
+dat |> 
+  mutate(BonusMalus = log10(BonusMalus)) |> 
+  mutate(
+    Area = as.numeric(Area),
+    VehPower = as.numeric(VehPower)
+  ) |> 
+  select(BonusMalus, Area, DrivAge, VehAge, VehPower) |> 
+  corrr::correlate() |> 
+  corrr::focus(BonusMalus)
+```
+
+*Findings:*
+
+It looks like
+
+- `BonusMalus` differs in `Areas` *A, B, C* to *D, E, F*.
+- `BonusMalus` is *strongly* negatively correlated to `DrivAge`. This implies, 
+  that *young drivers* need some time to get a bonus. 
+- For `VehAge`, it looks like there is, on average, a higher bonus for 
+  *new cars*.
+
+
+Finally in EDA, check how well the *predictors correlate with the response*
+
+
+```{r}
+#| label: corr-pred-res
+#| fig-cap: Distribution of variables for each VehBrand.
+#| fig-height: 10
+#| fig-width: 8
+#| code-fold: true
+#| message: false
+#| warning: false
+
+predictors = c(
+  "Region", "Area", "Density", 
+  "BonusMalus", "DrivAge",
+  "VehAge", "VehPower", "VehGas",
+  "Exposure"
+)
+dat_pred_res = dat |> 
+  select(ClaimAmountExposure, all_of(predictors))
+
+dat_pred_res |>
+  mutate(ClaimAmountExposure = log10(ClaimAmountExposure)) |>
+  mutate(BonusMalus = log10(BonusMalus)) |>
+  mutate(Density = log10(Density)) |>
+  mutate(
+    across(c(Area, VehPower), as.integer)
+  ) |> 
+  corrr::correlate() |> 
+  corrr::focus(ClaimAmountExposure)
+
+# boxplots of claims
+med = median(dat_pred_res$ClaimAmountExposure)
+
+dat_pred_res = dat_pred_res |> 
+  mutate(
+    Density = cut(Density, breaks = c(0, 10^(seq(0:5))), right = FALSE),
+    DrivAge = cut(DrivAge, breaks = c(18, 20, 25, seq(30, 100, by = 10)), right = FALSE),
+    VehAge = cut(VehAge, breaks = c(0, 2, seq(5, 25, by = 5), 100), right = FALSE),
+    BonusMalus = cut(BonusMalus, breaks = c(seq(50, 100, by = 10), 150, 200, 350), right = FALSE),
+    Exposure = cut(Exposure, breaks = c(seq(0, 1, .25), 3), right = FALSE)
+  )
+
+plt_res = predictors |> 
+  map(
+    \(x) {
+      dat_pred_res |> 
+        ggplot(aes(x = ClaimAmountExposure, y = !!sym(x))) +
+        geom_boxplot(color = "grey30") +
+        geom_vline(xintercept = med, col = "orange") +
+        scale_x_log10()
+    }
+  ) 
+
+wrap_plots(plt_res, ncol = 2) 
+```
+
+*Findings:*
+
+- Regions *R23*, *R42*, and *R94* have higher values.
+- Values increase with `Area`/`Density`
+- Positive correlation with `BonusMalus`
+- Negative correlation with `DrivAge` (strongest deviation from median for age < 20)
+- `VehAge`: only new cars with higher values, Oldtimer with lower values (usually no day-to-day-use)
+- No correlation with `VehPower` and no differentiation for `VehGas`
+- Strongest negative correlation with `Exposure`; seems like short running 
+  policies have a higher risk value.
+
+
+### Modeling
+
+For model training and comparison, we (mostly) follow the approach as described 
+in [Tidy Modeling with R](https://www.tmwr.org)
+
+#### Feature Engineering
+
+Based on our findings in EDA, we want to apply these modifications to the 
+data set for modeling:
+
+- remove below 1% (~53)/ above 99% (~111k) from data and log-transform response
+- drop `Area` (as heavily auto-correlated with `Density`)
+- log-transform `Density`
+- remove outliers WRT `BonusMalus` (> 99.9%; 156) and log-transform
+- remove outliers WRT `VehAge` (> 99.9%; 30) and log-transform
+- log-transform `VehPower`
+- drop `VehGas` as no explanatory power
+- remove `Exposure` values > 1 and categorize ([0,.25), [.25,.75), [.75, 1), [1]) 
+
+Additionally, depending on the selected model, we might need to *dummify* 
+the categorical variables (this happens in the workflow setup).
+
+Most of the feature engineering happens within the workflow setup (see later).
+
+```{r}
+#| label: mod-feat-eng
+#| code-fold: show
+
+qnt = quantile(dat$ClaimAmountExposure, c(.01, .99))
+
+mod = dat |> 
+  filter(
+    between(ClaimAmountExposure, qnt[1], qnt[2])
+  ) |> 
+  mutate(
+    ClaimAmountExposure = base::log10(ClaimAmountExposure)
+  )
+
+mod = mod |> 
+  select(-Area, -VehGas) |> 
+  filter(
+    BonusMalus < quantile(BonusMalus, .999),
+    VehAge < quantile(VehAge, .999),
+    Exposure <= 1
+  ) |> 
+  mutate(
+    Density = log10(Density),
+    BonusMalus = log10(BonusMalus),
+    VehAge = log10(VehAge + 10),
+    VehPower = log10(as.integer(VehPower)),
+    Exposure = case_when(
+      Exposure < .25 ~ 1L,
+      Exposure < .75 ~ 2L,
+      Exposure < 1 ~ 3L,
+      .default = 4L
+    )
+  ) 
+```
+
+
+#### Model Training
+
+For model training and evaluation, we follow the approach of an 
+initial split (80% train, 20% test), and a repeated cross-validation within
+the training data set for model comparison.
+
+We use a stratified sampling WRT the response to make sure that both groups 
+are similar WRT the distribution of the response variable.
+
+##### Data Splitting
+
+```{r}
+#| label: mod-data-split
+#| code-fold: show
+
+# set seed for reproducability
+set.seed(2021)
+
+# initials split of data into 80/20
+(mod_split = validation_split(mod, prop = 0.80, strata = ClaimAmountExposure))
+
+mod_train = training(mod_split$splits[[1]])
+mod_test = testing(mod_split$splits[[1]])
+
+# split train into folds for cv (5x repeated 10-fold cv)
+# mod_cv_folds = vfold_cv(mod_train, v = 5, strata = ClaimAmountExposure)
+mod_cv_folds = vfold_cv(mod_train, v = 10, repeats = 5, strata = ClaimAmountExposure)
+```
+
+##### Model Fitting and Comparison
+
+Let's start with three different modeling approaches: 
+- GLM
+- RandomForest
+- XGBoost
+
+For now, we do not apply any hyper-parameter tuning 
+(we use the default settings of the algorithms). 
+
+```{r}
+#| label: mod-fit-setup
+#| code-fold: show
+
+# define a recipe for data preparation
+basic_rec = recipe(
+  ClaimAmountExposure ~ Region + Density + DrivAge + BonusMalus + VehPower + VehAge + VehBrand + Exposure, 
+  data = mod
+) 
+
+# additionally for lm/xgboost
+dummy_rec = basic_rec |> 
+  step_dummy(all_nominal_predictors())
+
+onehot_rec = basic_rec |> 
+  step_dummy(all_nominal_predictors(), one_hot = TRUE)
+
+# define the modeling workflow
+mod_wflow = workflow_set(
+  preproc = list(
+    dummy = dummy_rec,
+    basic = basic_rec,
+    onehot = onehot_rec
+    ), 
+  models = list(
+    lm = linear_reg(engine = "glm"),
+    rf = rand_forest(mode = "regression"),
+    xgb = boost_tree(mode = "regression")
+    ),
+  cross = FALSE
+)
+
+```
+
+Run the model fit in cross-validation mode:
+
+```{r}
+#| label: mod-fit-exec
+#| code-fold: show
+
+# define resampling
+keep_pred = control_resamples(save_pred = TRUE, save_workflow = TRUE)
+
+# execute model-training in CV mode
+mod_wflow_cv = mod_wflow |> 
+  workflow_map(
+    "fit_resamples",
+    seed = 2021, verbose = TRUE, 
+    resamples = mod_cv_folds, control = keep_pred
+  )
+
+mod_wflow_cv
+```
+
+For comparing the models WRT to performance, 
+
+```{r}
+#| label: mod-eval-1
+#| fig-cap: Confidence intervals for RMSE and R² using different models during Cross Validation.
+#| code-fold: true
+
+# get the metrics
+cv_ranks = workflowsets::rank_results(
+  mod_wflow_cv, rank_metric = "rmse", select_best = TRUE
+) |> 
+  select(wflow_id, model, .metric, mean, rank) 
+
+cv_ranks
+
+# plot the metrics with confidence intervals
+autoplot(mod_wflow_cv) + 
+  scale_x_continuous(breaks = c(1, 4)) +
+  colorspace::scale_color_discrete_sequential(palette = "viridis")
+```
+
+Both RMSE and R² show the same order with regards to model performance.
+
+It looks like XGBoost slightly outperforms random forest, both 
+being better than the GLM.
+
+In general, all three show a very large error spread.
+
+
+Let's have a look at the cross-validated predictions.
+
+```{r}
+#| label: mod-eval-2
+#| fig-cap: Out-of-sample obs-vs-pred values. (a) using the log-10 units as predicted. (b) back-transformed to the original values.
+#| code-fold: true
+#| message: false
+#| warning: false
+
+# access the predictions across the cv
+cv_res = collect_predictions(mod_wflow_cv, summarize = TRUE)
+
+# compute values in original scale
+cv_res_orig = cv_res |> 
+  mutate(across(c(ClaimAmountExposure, .pred), \(x) 10^x))
+
+# plot obs-vs-pred
+p_log = cv_res %>% 
+  ggplot(aes(x = ClaimAmountExposure, y = .pred)) + 
+  # geom_point(alpha = .15) +
+  geom_hex(binwidth = .25) +
+  geom_abline(color = "orange") + 
+  geom_smooth(method = "lm", se = FALSE, linewidth = .5) +
+  colorspace::scale_fill_continuous_sequential(palette = "viridis") +
+  coord_obs_pred() + 
+  ylab("Predicted") +
+  theme(legend.position = "none") +
+  facet_grid(~wflow_id)
+
+# plot obs-vs-pred
+p_orig = cv_res_orig %>% 
+  ggplot(aes(x = ClaimAmountExposure, y = .pred)) + 
+  geom_point(alpha = .15) +
+  geom_abline(color = "orange") + 
+  geom_smooth(method = "lm", se = FALSE, linewidth = .5) +
+  coord_obs_pred() + 
+  ylab("Predicted") + 
+  facet_grid(~wflow_id)
+
+p_log / p_orig + plot_annotation(tag_levels = "a")
+```
+
+#### Model building
+
+Finally, retrain the all models on the entire train data
+and predict on the non-seen test data.
+
+```{r}
+#| label: mod-build
+#| code-fold: show
+
+# train the models on the total train set
+mod_wflow_test = mod_wflow |> 
+   workflow_map(
+    "fit_resamples",
+    seed = 2021, verbose = TRUE, 
+    resamples = mod_split, control = keep_pred
+  )
+```
+
+Let's extract the metrics and compare them with the ones from the 
+cross-validation. Ideally, these should be similar, indicating that we 
+didn't get too optimistic values in cross-validation.
+
+```{r}
+#| label: mod-build-metrics
+#| code-fold: show
+
+# get the metrics
+test_ranks = workflowsets::rank_results(
+  mod_wflow_test, rank_metric = "rmse", select_best = TRUE
+) |> 
+  select(wflow_id, model, .metric, mean, rank)
+
+# compare to cv-metrics
+metrics = inner_join(
+  cv_ranks, test_ranks, 
+  by = c("wflow_id", "model", ".metric"),
+  suffix = c(".cv", ".test")
+)
+
+kableExtra::kbl(metrics,  caption = "Performance metrics both for CV and test holdout.") |> 
+  kableExtra::kable_paper("hover")
+```
+
+```{r}
+#| label: mod-build-obs-pred
+#| fig-cap: Test obs-vs-pred values. (a) using the log-10 units as predicted. (b) back-transformed to the original values.
+#| code-fold: true
+#| message: false
+#| warning: false
+
+# access the predictions on the final test set
+test_res = collect_predictions(mod_wflow_cv, summarize = TRUE)
+
+# compute values in original scale
+test_res_orig = test_res |> 
+  mutate(across(c(ClaimAmountExposure, .pred), \(x) 10^x))
+
+# plot obs-vs-pred
+p_log = test_res %>% 
+  ggplot(aes(x = ClaimAmountExposure, y = .pred)) + 
+  # geom_point(alpha = .15) +
+  geom_hex(binwidth = .25) +
+  geom_abline(color = "orange") + 
+  geom_smooth(method = "lm", se = FALSE, linewidth = .5) +
+  colorspace::scale_fill_continuous_sequential(palette = "viridis") +
+  coord_obs_pred() + 
+  ylab("Predicted") +
+  theme(legend.position = "none") +
+  facet_grid(~wflow_id)
+
+# plot obs-vs-pred
+p_orig = test_res_orig %>% 
+  ggplot(aes(x = ClaimAmountExposure, y = .pred)) + 
+  geom_point(alpha = .15) +
+  geom_abline(color = "orange") + 
+  geom_smooth(method = "lm", se = FALSE, linewidth = .5) +
+  coord_obs_pred() + 
+  ylab("Predicted") + 
+  facet_grid(~wflow_id)
+
+p_log / p_orig + plot_annotation(tag_levels = "a")
+```
+
+#### Model explanations / Variable importance
+
+Let's have a deeper look into the models and their coefficients / variables
+importance.
+
+```{r}
+#| label: mod-retrain-
+#| code-fold: true
+
+models = mod_wflow$wflow_id |> 
+  set_names() |> 
+  map(
+    \(x) {
+      mod_wflow |> 
+        extract_workflow(x) |> 
+        fit(mod_train) 
+    }
+  )
+```
+
+First, check the coefficients of the linear model
+
+```{r}
+#| label: mod-lm-coords-
+#| code-fold: true
+
+dummy_lm = models$dummy_lm |> 
+  extract_fit_engine() 
+
+coeff = coefficients(dummy_lm) |> 
+  enframe() |> 
+  mutate(abs = abs(value)) |> 
+  arrange(desc(abs))
+
+coeff
+```
+
+For the XGBoost model, extract the variable importances.
+
+```{r}
+#| label: mod-xgboost-vip-
+#| fig-cap: Variable importance plot for the XGBoost model.
+#| code-fold: true
+
+models$onehot_xgb |> 
+  extract_fit_parsnip() |> 
+  vip::vip()
+
+# xgb = models$onehot_xgb |> 
+#   extract_model() 
+# xgboost::xgb.plot.tree(model = xgb, trees = 0:1)
+```
+
+#### Model selection
+
+Based on the *RMSE* and the *R²*, we'd select the XGBoost algorithm for now.
+Nonetheless, as the *pred-vs-obs* plots show, the linear model might be best 
+when focusing on the most frequent values of the response.
+
+#### Model optimizations
+
+Different improvement steps could be:
+
+- Further feature engineering, e.g. a better categorization to some variables
+  (e.g. `DrivAge`) to emphasis more on relevant pattern.
+- We did not apply any hyper-parameter tuning for the tree-based modeling 
+  approaches in this study. 
+  Tuning these might help to find the optimal combinations.
+- Further models (like deep neural nets, etc.) and ensemble models can be 
+  tested.
+
+## Discussion and Outlook
+
+In this study, we included the `Exposure` as additional explanatory variable.
+
+It might hint at short-term policies (e.g. car rental, leasing) vs. regular
+policies. This might be useful for calculating fare rates, if the insurance 
+company knows in advance, which kind of contract (short vs. unlimited) it is.
+Then the predictor variable would most likely be a boolean category.
+
+Here, we focused on modeling the *expected amount of damage*.
+
+To get to the a fair insurance contribution for each policy, we need to assess
+the second aspect of the overall "risk" as well: the *probability of occurrence*
+for causing a damage.
+
+This could be approached, e.g. using a logistic regression model.
