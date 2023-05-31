@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="coding_challenge_slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="coding_challenge_slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="coding_challenge_slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="coding_challenge_slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="coding_challenge_slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="coding_challenge_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="coding_challenge_slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="coding_challenge_slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="coding_challenge_slides_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="coding_challenge_slides_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="coding_challenge_slides_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.3.353">
+
+  <meta name="author" content="Christoph Stepper">
+  <meta name="dcterms.date" content="2023-05-31">
+  <title>Motor third-part liability</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="coding_challenge_slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="coding_challenge_slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="coding_challenge_slides_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="coding_challenge_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="coding_challenge_slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="coding_challenge_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="coding_challenge_slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Motor third-part liability</h1>
+  <p class="subtitle">Modeling expected amount of damage</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Christoph Stepper 
+</div>
+</div>
+</div>
+
+  <p class="date">2023-05-31</p>
+</section>
+<section id="background-and-task" class="slide level2">
+<h2>Background and Task</h2>
+<ul>
+<li><p>Two datasets <a href="https://www.openml.org/d/41214">freMTPL2freq</a> and <a href="https://www.openml.org/d/41215">freMTPL2sev</a> contain risk features and claims (numbers and amounts) for motor third-part liability policies in France.</p></li>
+<li><p><em>Task</em>: model the <em>expected amount of damage per policy holder and year</em>, using a set of risk features.</p></li>
+</ul>
+</section>
+<section>
+<section id="analysis" class="title-slide slide level1 center">
+<h1>Analysis</h1>
+<div class="cell">
+
+</div>
+<!-- ## Data Import and Preparation -->
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+</section>
+<section id="modeling-dataset" class="slide level2">
+<h2>Modeling Dataset</h2>
+<!-- By aggregating the individual claim amounts in the `sev` dataset,  -->
+<!-- we get the total claim amount per `IDpol`. -->
+<!-- ```{r} -->
+<!-- #| label: aggregate-claim -->
+<!-- #| results: hide -->
+<!-- claim = sev |>  -->
+<!--   group_by(IDpol) |>  -->
+<!--   summarize( -->
+<!--     ClaimNumber = n(), -->
+<!--     ClaimAmount = sum(ClaimAmount) -->
+<!--   ) -->
+<!-- ``` -->
+<!-- We can already see from the summary, that the distribution of total claim  -->
+<!-- amounts is *heavily right-skewed*. -->
+<!-- --- -->
+<!-- ```{r} -->
+<!-- #| label: boxplot-claimNumber-claimAmount -->
+<!-- #| code-fold: true -->
+<!-- #| fig-cap: Distribution of total claim amounts (on log10-transformed axis), splitted by number of claims. -->
+<!-- p_data = claim |>  -->
+<!--   mutate(ClaimNumber = ordered(ClaimNumber)) |>  -->
+<!--   mutate(ClaimNumber = fct_lump(ClaimNumber, n = 3, other_level = ">=4"))  -->
+<!-- p_xlabs = paste0( -->
+
+<!--   levels(p_data$ClaimNumber), "\n(N=", table(p_data$ClaimNumber), ")" -->
+<!-- ) -->
+<!-- p = p_data |>  -->
+<!--   ggplot(aes(x = ClaimNumber, y = ClaimAmount)) + -->
+<!--   geom_boxplot(varwidth = TRUE, color = "grey30") +  -->
+<!--   scale_y_log10() + -->
+<!--   scale_x_discrete(labels = p_xlabs) + -->
+<!--   labs(x = "number of claims", y = "sum of claim amounts") -->
+<!-- p -->
+<!-- ``` -->
+<!-- The boxplot shows, that on average the claim amount increases with claim  -->
+<!-- numbers, but has a very large spread. -->
+<!-- Additionally, we can see, that even in the 1st group (1 claim), the distribution -->
+<!-- of claim amounts is heavily skewed. -->
+<!-- Next, we add the risk features to the the aggregated claim amounts and  -->
+<!-- compute the average height of claim amounts per exposure time  -->
+<!-- (defined as the response variable: `ClaimAmountExposure`) -->
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># aggregate the individual claim amounts per ID</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>claim <span class="ot">=</span> sev <span class="sc">|&gt;</span> </span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="fu">group_by</span>(IDpol) <span class="sc">|&gt;</span> </span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="at">ClaimNumber =</span> <span class="fu">n</span>(),</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="at">ClaimAmount =</span> <span class="fu">sum</span>(ClaimAmount)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  )</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># join by ID and ClaimNumber (to make sure, that we only have correctly </span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># assigned claims in the analysis)</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>dat <span class="ot">=</span> <span class="fu">inner_join</span>(claim, freq, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"IDpol"</span>, <span class="st">"ClaimNumber"</span> <span class="ot">=</span> <span class="st">"ClaimNb"</span>))</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># compute response and keep only relevant columns</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>dat <span class="ot">=</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-16"><a href="#cb1-16"></a>    <span class="at">ClaimAmountExposure =</span> ClaimAmount <span class="sc">/</span> Exposure,</span>
+<span id="cb1-17"><a href="#cb1-17"></a>    <span class="at">.after =</span> ClaimNumber</span>
+<span id="cb1-18"><a href="#cb1-18"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb1-19"><a href="#cb1-19"></a>  <span class="fu">select</span>(<span class="sc">-</span>ClaimNumber, <span class="sc">-</span>ClaimAmount)</span>
+<span id="cb1-20"><a href="#cb1-20"></a></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="fu">str</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section>
+<section>
+<section id="eda" class="title-slide slide level1 center">
+<h1>EDA</h1>
+
+</section>
+<section class="slide level2">
+
+<h4 id="response">Response</h4>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div style="font-size: 60%;">
+<!-- First, focus on the *claim amount per exposure*, that we want to predict. -->
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/eda-claim-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="coding_challenge_slides_files/figure-revealjs/eda-claim-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Claim amounts per exposure (on log10-transformed axis). (a) density plot. (b) descending ecdf in log-log.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div style="font-size: 60%;">
+<!-- The two plots describing the distribution of the response values put on a  -->
+<!-- log10-transformed axis show the following:  -->
+<p><em>Findings:</em></p>
+<ol type="1">
+<li>log-transformed data shows a <em>bell</em>-shaped distribution (data in <em>lognormal distribution</em>)</li>
+<li>strong emphasis at values of ~ 1200; <em>narrow and peaked distribution</em> (underdispersion in data)</li>
+<li>some <em>extra peaks</em> in the distribution (many claim amounts with a fixed payment)</li>
+<li>descending ECDF in log-log-scales: <em>no-power-law-distribution</em> (no straight line) and <em>heavily tailedness</em> shape of the distribution at the right side.</li>
+</ol>
+<p>–&gt; Apply a <em>log-transformation</em> to the outcome for modeling.</p>
+<p>(advantages: less influence of errors in predicting very high values, stabilized variance; disadvantages: difficult interpretation of model coefficients and performance metrics).</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<!-- ## Predictors -->
+<!-- Next, let's have a look at the different predictors. -->
+<div class="cell">
+
+</div>
+<!-- ##### Distributions  -->
+<!-- Let's see how the predictors are distributed and if we should apply some  -->
+<!-- transformations. -->
+<h4 id="numeric-predictors">Numeric predictors</h4>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div style="font-size: 60%;">
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/hist-qq-preds-num-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="coding_challenge_slides_files/figure-revealjs/hist-qq-preds-num-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Histograms (a) and QQ-Plots (b) of the numeric predictor variables.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<!-- ```{r} -->
+<!-- #| label: quantiles-predictors-numeric -->
+<!-- #| code-fold: true -->
+<!-- #| results: hide -->
+<!-- q = c(0, .01, .05, .1, .25, .5, .75, .9, .95, .99, .999, 1) -->
+<!-- preds_numeric_quant = preds_numeric |> map(\(x) {quantile(x, probs = q)}) -->
+<!-- preds_numeric_quant = do.call(rbind, preds_numeric_quant) -->
+<!-- kableExtra::kbl( -->
+<!--   preds_numeric_quant, caption = "Quantiles of numeric predictors." -->
+<!-- ) |>  -->
+<!--   kableExtra::kable_paper("hover") -->
+<!-- ``` -->
+<div style="font-size: 65%;">
+<p><em>Findings:</em></p>
+<ul>
+<li><code>BonusMalus</code>: heavily <em>right-skewed</em>, with almost half of the policies having the minimum value of 50, almost nothing &gt; 150</li>
+<li><code>Density</code> heavily <em>right-skewed</em>, but larger share at <em>maximum</em> value (Paris?)</li>
+<li><code>DrivAge</code>: right-skewed and cut-off at <em>age 18</em> (min driver age)</li>
+<li><code>Exposure</code>: looks like mostly being full <em>one-year</em> data. Some outliers &gt; 1 and some shorter-periods.</li>
+<li><code>VehAge</code>: heavily <em>right-skewed</em>, some outliers with values &gt; 30.</li>
+</ul>
+<p>We might need to <em>remove some outliers</em> and apply a <em>log-transformation</em>.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h4 id="ordinal-and-categorical-predictors">Ordinal and categorical predictors</h4>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div style="font-size: 60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/eda-predictors-ord-cat-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="coding_challenge_slides_files/figure-revealjs/eda-predictors-ord-cat-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Barcharts with frequencies of the ordinal and categorical predictor variables.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<!-- ::: {style="font-size: 60%;"} -->
+<!-- ```{r} -->
+<!-- #| label: eda-predictors-area-region -->
+<!-- #| fig-cap: Counts of policies in Region vs. Area. -->
+<!-- #| code-fold: true -->
+<!-- preds_ord_cat |>  -->
+<!--   ggplot(aes(x = Area, y = Region)) +  -->
+<!--   geom_count(color = "grey30") -->
+<!-- ``` -->
+<!-- ::: -->
+</div>
+</div><div class="column" style="width:50%;">
+<div style="font-size: 70%;">
+<p><em>Findings:</em></p>
+<ul>
+<li><code>Area</code>: most in the <em>mid</em>-populated areas</li>
+<li><code>Region</code> not evenly distributed, strong emphasis on four classes</li>
+<li><code>VehBrand</code>: B1 and B2 most popular brands in France; B12 3rd place.</li>
+<li><code>VehGas</code>: evenly distributed, no differentiation</li>
+<li><code>VehPower</code>: looks like <em>log-normally</em> distributed</li>
+</ul>
+<p>Maybe we can aggregate <code>Region</code> codes to less levels.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h4 id="correlation-analysis">Correlation Analysis</h4>
+<div style="font-size: 60%;">
+<p>Pearson correlations between some of the <em>predictor variables</em>.</p>
+<!-- To get a first impression, create a correlation matrix of the numeric  -->
+<!-- (and ordinal) variables. -->
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>        term BonusMalus VehAge  Area Density VehPower DrivAge
+1 BonusMalus                                                 
+2     VehAge       .139                                      
+3       Area       .085  -.071                               
+4    Density       .048  -.078  .593                         
+5   VehPower      -.069  -.016  .019    .045                 
+6    DrivAge      -.472  -.072 -.039    .002     .022        </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/cor-mat-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="coding_challenge_slides_files/figure-revealjs/cor-mat-plot-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Correlation matrix plot of numeric (and ordinal) variables.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div style="font-size: 70%;">
+<ul>
+<li>Is <code>Area</code> just an encoding for the <code>Density</code>?</li>
+</ul>
+</div>
+<div style="font-size: 60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/corr-dens-area-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="coding_challenge_slides_files/figure-revealjs/corr-dens-area-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Population density (on log10-transformed axis), splitted for different Area codes.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">with</span>(dat, <span class="fu">cor</span>(<span class="fu">as.numeric</span>(Area), <span class="fu">log10</span>(Density)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9704985</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div style="font-size: 70%;">
+<ul>
+<li>How do the different variables (<code>Area</code>, <code>DrivAge</code>, <code>VehAge</code>, <code>VehPower</code>) relate to <code>BonusMalus</code></li>
+</ul>
+</div>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div style="font-size: 60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/corr-bonusmalus-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="coding_challenge_slides_files/figure-revealjs/corr-bonusmalus-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>BonusMalus (on log10-transformed axis), splitted for different levels of Area, DrivAge, VehAge, VehPower</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Pearson correlations (with log10-transformed <code>BonusMalus</code>)</p>
+</div>
+<div style="font-size: 70%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>       Area     DrivAge      VehAge    VehPower 
+ 0.09012045 -0.48952427  0.13910275 -0.06915955 </code></pre>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<div style="font-size: 70%;">
+<p><em>Findings:</em></p>
+<ul>
+<li><code>BonusMalus</code> differs in <code>Areas</code> <em>A, B, C</em> to <em>D, E, F</em>.</li>
+<li><code>BonusMalus</code> <em>strongly</em> negatively correlated to <code>DrivAge</code> (<em>young drivers</em> need some time to get a bonus)</li>
+<li><code>BonusMalus</code> positive correlated with <code>VehAge</code> (a higher bonus for <em>new cars</em>)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div style="font-size: 70%;">
+<ul>
+<li>How well do the <em>predictors correlate with the response</em>?</li>
+</ul>
+</div>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div style="font-size: 60%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><a href="coding_challenge_slides_files/figure-revealjs/corr-pred-res-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="coding_challenge_slides_files/figure-revealjs/corr-pred-res-1.png" class="margin-caption" width="960"></a></p>
+</div>
+</div>
+</div>
+<div style="font-size: 55%;">
+<p>Pearson correlation coefficients (with log10-transformed response):</p>
+</div>
+<div style="font-size: 65%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>        Area      Density   BonusMalus      DrivAge       VehAge     VehPower 
+ 0.040206646  0.038454660  0.123855403 -0.068993685 -0.023226558  0.008348697 
+    Exposure 
+-0.568023520 </code></pre>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<div style="font-size: 60%;">
+<p><em>Findings:</em></p>
+<ul>
+<li>Regions <em>R23</em>, <em>R42</em>, and <em>R94</em> have higher values.</li>
+<li>Values increase with <code>Area</code>/<code>Density</code></li>
+<li>Positive correlation with <code>BonusMalus</code></li>
+<li>Negative correlation with <code>DrivAge</code> (strongest deviation from median for age &lt; 20)</li>
+<li><code>VehAge</code>: only new cars with higher values, Oldtimer with lower values (usually no day-to-day-use)</li>
+<li>No correlation with <code>VehPower</code> and no differentiation for <code>VehGas</code></li>
+<li>Strongest negative correlation with <code>Exposure</code>; short running policies with higher risk.</li>
+</ul>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="modeling" class="title-slide slide level1 center">
+<h1>Modeling</h1>
+
+</section>
+<section class="slide level2">
+
+<h4 id="feature-engineering">Feature Engineering</h4>
+<div style="font-size: 70%;">
+<p>Based on our findings in EDA, we want to apply these modifications to the data set for modeling:</p>
+<ul>
+<li>remove below 1% (~53)/ above 99% (~111k) from data and log-transform response</li>
+<li>drop <code>Area</code> (as heavily auto-correlated with <code>Density</code>)</li>
+<li>log-transform <code>Density</code></li>
+<li>remove outliers WRT <code>BonusMalus</code> (&gt; 99.9%; 156) and log-transform</li>
+<li>remove outliers WRT <code>VehAge</code> (&gt; 99.9%; 30) and log-transform</li>
+<li>log-transform <code>VehPower</code></li>
+<li>drop <code>VehGas</code> as no explanatory power</li>
+<li>remove <code>Exposure</code> values &gt; 1 and categorize ([0,.25), [.25,.75), [.75, 1), [1])</li>
+</ul>
+<p>Additionally, depending on the selected model, we might need to <em>dummify</em> the categorical variables (this happens in the workflow setup).</p>
+<!-- Most of the feature engineering happens within the workflow setup (see later). -->
+</div>
+</section>
+<section class="slide level2">
+
+<div style="font-size: 70%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>qnt <span class="ot">=</span> <span class="fu">quantile</span>(dat<span class="sc">$</span>ClaimAmountExposure, <span class="fu">c</span>(.<span class="dv">01</span>, .<span class="dv">99</span>))</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a>mod <span class="ot">=</span> dat <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">filter</span>(</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="fu">between</span>(ClaimAmountExposure, qnt[<span class="dv">1</span>], qnt[<span class="dv">2</span>])</span>
+<span id="cb7-6"><a href="#cb7-6"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="at">ClaimAmountExposure =</span> base<span class="sc">::</span><span class="fu">log10</span>(ClaimAmountExposure)</span>
+<span id="cb7-9"><a href="#cb7-9"></a>  )</span>
+<span id="cb7-10"><a href="#cb7-10"></a></span>
+<span id="cb7-11"><a href="#cb7-11"></a>mod <span class="ot">=</span> mod <span class="sc">|&gt;</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a>  <span class="fu">select</span>(<span class="sc">-</span>Area, <span class="sc">-</span>VehGas) <span class="sc">|&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>  <span class="fu">filter</span>(</span>
+<span id="cb7-14"><a href="#cb7-14"></a>    BonusMalus <span class="sc">&lt;</span> <span class="fu">quantile</span>(BonusMalus, .<span class="dv">999</span>),</span>
+<span id="cb7-15"><a href="#cb7-15"></a>    VehAge <span class="sc">&lt;</span> <span class="fu">quantile</span>(VehAge, .<span class="dv">999</span>),</span>
+<span id="cb7-16"><a href="#cb7-16"></a>    Exposure <span class="sc">&lt;=</span> <span class="dv">1</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-19"><a href="#cb7-19"></a>    <span class="at">Density =</span> <span class="fu">log10</span>(Density),</span>
+<span id="cb7-20"><a href="#cb7-20"></a>    <span class="at">BonusMalus =</span> <span class="fu">log10</span>(BonusMalus),</span>
+<span id="cb7-21"><a href="#cb7-21"></a>    <span class="at">VehAge =</span> <span class="fu">log10</span>(VehAge <span class="sc">+</span> <span class="dv">10</span>),</span>
+<span id="cb7-22"><a href="#cb7-22"></a>    <span class="at">VehPower =</span> <span class="fu">log10</span>(<span class="fu">as.integer</span>(VehPower)),</span>
+<span id="cb7-23"><a href="#cb7-23"></a>    <span class="at">Exposure =</span> <span class="fu">case_when</span>(</span>
+<span id="cb7-24"><a href="#cb7-24"></a>      Exposure <span class="sc">&lt;</span> .<span class="dv">25</span> <span class="sc">~</span> 1L,</span>
+<span id="cb7-25"><a href="#cb7-25"></a>      Exposure <span class="sc">&lt;</span> .<span class="dv">75</span> <span class="sc">~</span> 2L,</span>
+<span id="cb7-26"><a href="#cb7-26"></a>      Exposure <span class="sc">&lt;</span> <span class="dv">1</span> <span class="sc">~</span> 3L,</span>
+<span id="cb7-27"><a href="#cb7-27"></a>      <span class="at">.default =</span> 4L</span>
+<span id="cb7-28"><a href="#cb7-28"></a>    )</span>
+<span id="cb7-29"><a href="#cb7-29"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h4 id="model-training">Model Training</h4>
+<div style="font-size: 70%;">
+<p>Model training and evaluation</p>
+<ul>
+<li>initial split (80% train, 20% test)</li>
+<li>repeated cross-validation within the training data set.</li>
+</ul>
+<p>We use a <em>stratified sampling WRT the response</em> to make sure that both groups are similar WRT the distribution of the response variable.</p>
+<p>Let’s start with three different modeling approaches:</p>
+<ul>
+<li>GLM</li>
+<li>RandomForest</li>
+<li>XGBoost</li>
+</ul>
+<p>For now, we do not apply any hyper-parameter tuning (we use the default settings of the algorithms).</p>
+</div>
+</section>
+<section class="slide level2">
+
+<h5 id="data-splitting">Data Splitting</h5>
+<div style="font-size: 70%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># set seed for reproducability</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co"># initials split of data into 80/20</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>(<span class="at">mod_split =</span> <span class="fu">validation_split</span>(mod, <span class="at">prop =</span> <span class="fl">0.80</span>, <span class="at">strata =</span> ClaimAmountExposure))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Validation Set Split (0.8/0.2)  using stratification 
+# A tibble: 1 × 2
+  splits               id        
+  &lt;list&gt;               &lt;chr&gt;     
+1 &lt;split [19460/4868]&gt; validation</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>mod_train <span class="ot">=</span> <span class="fu">training</span>(mod_split<span class="sc">$</span>splits[[<span class="dv">1</span>]])</span>
+<span id="cb10-2"><a href="#cb10-2"></a>mod_test <span class="ot">=</span> <span class="fu">testing</span>(mod_split<span class="sc">$</span>splits[[<span class="dv">1</span>]])</span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># split train into folds for cv (5x repeated 10-fold cv)</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co"># mod_cv_folds = vfold_cv(mod_train, v = 5, strata = ClaimAmountExposure)</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>mod_cv_folds <span class="ot">=</span> <span class="fu">vfold_cv</span>(mod_train, <span class="at">v =</span> <span class="dv">10</span>, <span class="at">repeats =</span> <span class="dv">5</span>, <span class="at">strata =</span> ClaimAmountExposure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h5 id="model-fitting-and-comparison">Model Fitting and Comparison</h5>
+<div style="font-size: 70%;">
+<p>Define preprocessing recipe and model algorithms.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># define a recipe for data preparation</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>basic_rec <span class="ot">=</span> <span class="fu">recipe</span>(</span>
+<span id="cb11-3"><a href="#cb11-3"></a>  ClaimAmountExposure <span class="sc">~</span> Region <span class="sc">+</span> Density <span class="sc">+</span> DrivAge <span class="sc">+</span> BonusMalus <span class="sc">+</span> VehPower <span class="sc">+</span> VehAge <span class="sc">+</span> VehBrand <span class="sc">+</span> Exposure,</span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="at">data =</span> mod</span>
+<span id="cb11-5"><a href="#cb11-5"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># additionally for lm/xgboost</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>dummy_rec <span class="ot">=</span> basic_rec <span class="sc">|&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>())</span>
+<span id="cb11-10"><a href="#cb11-10"></a></span>
+<span id="cb11-11"><a href="#cb11-11"></a>onehot_rec <span class="ot">=</span> basic_rec <span class="sc">|&gt;</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">one_hot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-13"><a href="#cb11-13"></a></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co"># define the modeling workflow</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a>mod_wflow <span class="ot">=</span> <span class="fu">workflow_set</span>(</span>
+<span id="cb11-16"><a href="#cb11-16"></a>  <span class="at">preproc =</span> <span class="fu">list</span>(</span>
+<span id="cb11-17"><a href="#cb11-17"></a>    <span class="at">dummy =</span> dummy_rec,</span>
+<span id="cb11-18"><a href="#cb11-18"></a>    <span class="at">basic =</span> basic_rec,</span>
+<span id="cb11-19"><a href="#cb11-19"></a>    <span class="at">onehot =</span> onehot_rec</span>
+<span id="cb11-20"><a href="#cb11-20"></a>    ),</span>
+<span id="cb11-21"><a href="#cb11-21"></a>  <span class="at">models =</span> <span class="fu">list</span>(</span>
+<span id="cb11-22"><a href="#cb11-22"></a>    <span class="at">lm =</span> <span class="fu">linear_reg</span>(<span class="at">engine =</span> <span class="st">"glm"</span>),</span>
+<span id="cb11-23"><a href="#cb11-23"></a>    <span class="at">rf =</span> <span class="fu">rand_forest</span>(<span class="at">mode =</span> <span class="st">"regression"</span>),</span>
+<span id="cb11-24"><a href="#cb11-24"></a>    <span class="at">xgb =</span> <span class="fu">boost_tree</span>(<span class="at">mode =</span> <span class="st">"regression"</span>)</span>
+<span id="cb11-25"><a href="#cb11-25"></a>    ),</span>
+<span id="cb11-26"><a href="#cb11-26"></a>  <span class="at">cross =</span> <span class="cn">FALSE</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div style="font-size: 70%;">
+<p>Fit models in cross-validation mode:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># define resampling</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>keep_pred <span class="ot">=</span> <span class="fu">control_resamples</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>, <span class="at">save_workflow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co"># execute model-training in CV mode</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a>mod_wflow_cv <span class="ot">=</span> mod_wflow <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">workflow_map</span>(</span>
+<span id="cb12-7"><a href="#cb12-7"></a>    <span class="st">"fit_resamples"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8"></a>    <span class="at">seed =</span> <span class="dv">2021</span>, <span class="at">verbose =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-9"><a href="#cb12-9"></a>    <span class="at">resamples =</span> mod_cv_folds, <span class="at">control =</span> keep_pred</span>
+<span id="cb12-10"><a href="#cb12-10"></a>  )</span>
+<span id="cb12-11"><a href="#cb12-11"></a></span>
+<span id="cb12-12"><a href="#cb12-12"></a>mod_wflow_cv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A workflow set/tibble: 3 × 4
+  wflow_id   info             option    result   
+  &lt;chr&gt;      &lt;list&gt;           &lt;list&gt;    &lt;list&gt;   
+1 dummy_lm   &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;
+2 basic_rf   &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;
+3 onehot_xgb &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div style="font-size: 70%;">
+<p>Performance evaluation: errors in cross-validation mode.</p>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  wflow_id   model       .metric  mean  rank
+  &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt;
+1 onehot_xgb boost_tree  rmse    0.457     1
+2 onehot_xgb boost_tree  rsq     0.311     1
+3 basic_rf   rand_forest rmse    0.461     2
+4 basic_rf   rand_forest rsq     0.297     2
+5 dummy_lm   linear_reg  rmse    0.467     3
+6 dummy_lm   linear_reg  rsq     0.277     3</code></pre>
+</div>
+</div>
+<div style="font-size: 60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/mod-eval-1-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="coding_challenge_slides_files/figure-revealjs/mod-eval-1-1-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Confidence intervals for RMSE and R² using different models during Cross Validation.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<!-- Both RMSE and R² show the same order with regards to model performance. -->
+<!-- It looks like XGBoost slightly outperforms random forest, both  -->
+<!-- being better than the GLM. -->
+<!-- In general, all three show a very large error spread. -->
+</section>
+<section class="slide level2">
+
+<div style="font-size: 70%;">
+<p>Cross-validated predictions:</p>
+</div>
+<div style="font-size: 60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/mod-eval-2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="coding_challenge_slides_files/figure-revealjs/mod-eval-2-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Out-of-sample obs-vs-pred values. (a) using the log-10 units as predicted. (b) back-transformed to the original values.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h4 id="model-building">Model building</h4>
+<div style="font-size: 70%;">
+<p>Retrain the all models on the entire train data and predict on the non-seen test data.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># train the models on the total train set</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>mod_wflow_test <span class="ot">=</span> mod_wflow <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>   <span class="fu">workflow_map</span>(</span>
+<span id="cb15-4"><a href="#cb15-4"></a>    <span class="st">"fit_resamples"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5"></a>    <span class="at">seed =</span> <span class="dv">2021</span>, <span class="at">verbose =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb15-6"><a href="#cb15-6"></a>    <span class="at">resamples =</span> mod_split, <span class="at">control =</span> keep_pred</span>
+<span id="cb15-7"><a href="#cb15-7"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- Let's extract the metrics and compare them with the ones from the  -->
+<!-- cross-validation. Ideally, these should be similar, indicating that we  -->
+<!-- didn't get too optimistic values in cross-validation. -->
+<p>Error metrics:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  wflow_id   model       .metric mean.cv rank.cv mean.test rank.test
+  &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;     &lt;int&gt;
+1 onehot_xgb boost_tree  rmse      0.457       1     0.461         1
+2 onehot_xgb boost_tree  rsq       0.311       1     0.313         1
+3 basic_rf   rand_forest rmse      0.461       2     0.465         2
+4 basic_rf   rand_forest rsq       0.297       2     0.302         2
+5 dummy_lm   linear_reg  rmse      0.467       3     0.474         3
+6 dummy_lm   linear_reg  rsq       0.277       3     0.273         3</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div style="font-size: 70%;">
+<p>Test predictions:</p>
+</div>
+<div style="font-size: 60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/mod-build-obs-pred-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="coding_challenge_slides_files/figure-revealjs/mod-build-obs-pred-1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Test obs-vs-pred values. (a) using the log-10 units as predicted. (b) back-transformed to the original values.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h4 id="model-explanations-variable-importance">Model explanations / Variable importance</h4>
+<!-- Let's have a deeper look into the models and their coefficients / variables -->
+<!-- importance. -->
+<div class="cell">
+
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Linear Model:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 38 × 3
+   name           value    abs
+   &lt;chr&gt;          &lt;dbl&gt;  &lt;dbl&gt;
+ 1 (Intercept)   3.15   3.15  
+ 2 BonusMalus    0.407  0.407 
+ 3 Exposure     -0.271  0.271 
+ 4 Region_R43    0.158  0.158 
+ 5 Region_R94    0.117  0.117 
+ 6 Region_R83   -0.0680 0.0680
+ 7 Region_R21   -0.0664 0.0664
+ 8 Region_R41    0.0647 0.0647
+ 9 VehBrand_B11 -0.0548 0.0548
+10 Region_R72    0.0474 0.0474
+# ℹ 28 more rows</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>XGBoost:</p>
+<div style="font-size: 60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center margin-caption">
+<figure>
+<p><a href="coding_challenge_slides_files/figure-revealjs/mod-xgboost-vip--1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="coding_challenge_slides_files/figure-revealjs/mod-xgboost-vip--1.png" class="margin-caption" width="960"></a></p>
+<figcaption>Variable importance plot for the XGBoost model.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h4 id="model-selection">Model selection</h4>
+<div style="font-size: 70%;">
+<p>Based on the <em>RMSE</em> and the <em>R²</em>, we’d select the XGBoost algorithm for now. Nonetheless, as the <em>pred-vs-obs</em> plots show, the linear model might be best when focusing on the most frequent values of the response.</p>
+</div>
+<h4 id="model-optimizations">Model optimizations</h4>
+<div style="font-size: 70%;">
+<p>Different improvement steps could be:</p>
+<ul>
+<li>Further feature engineering, e.g.&nbsp;a better categorization to some variables (e.g.&nbsp;<code>DrivAge</code>) to emphasis more on relevant pattern.</li>
+<li>We did not apply any hyper-parameter tuning for the tree-based modeling approaches in this study. Tuning these might help to find the optimal combinations.</li>
+<li>Further models (like deep neural nets, etc.) and ensemble models can be tested.</li>
+</ul>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="discussion-and-outlook">Discussion and Outlook</h3>
+<div style="font-size: 70%;">
+<p>In this study, we included the <code>Exposure</code> as additional explanatory variable.</p>
+<p>It might hint at short-term policies (e.g.&nbsp;car rental, leasing) vs.&nbsp;regular policies. This might be useful for calculating fare rates, if the insurance company knows in advance, which kind of contract (short vs.&nbsp;unlimited) it is. Then the predictor variable would most likely be a boolean category.</p>
+<p>Here, we focused on modeling the <em>expected amount of damage</em>.</p>
+<p>To get to the a fair insurance contribution for each policy, we need to assess the second aspect of the overall “risk” as well: the <em>probability of occurrence</em> for causing a damage.</p>
+<p>This could be approached, e.g.&nbsp;using a logistic regression model.</p>
+</div>
+<div class="footer footer-default">
+
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="coding_challenge_slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="coding_challenge_slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+    
+
+</body></html>
