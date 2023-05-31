@@ -194,7 +194,7 @@ First, focus on the *claim amount per exposure*, that we want to predict.
 ```{r}
 #| label: eda-claim
 #| code-fold: true
-#| fig-cap: Claim amounts per exposure (on log10-transformed axis). (a) density plot. (c) descending ecdf in log-log.
+#| fig-cap: Claim amounts per exposure (on log10-transformed axis). (a) density plot. (b) descending ecdf in log-log.
 
 # density plot
 dens = density(log10(dat$ClaimAmountExposure))
@@ -548,7 +548,7 @@ Finally in EDA, check how well the *predictors correlate with the response*
 
 ```{r}
 #| label: corr-pred-res
-#| fig-cap: Distribution of variables for each VehBrand.
+#| fig-cap: Correlation of predictors with response.
 #| fig-height: 10
 #| fig-width: 8
 #| code-fold: true
@@ -765,7 +765,8 @@ mod_wflow_cv = mod_wflow |>
 mod_wflow_cv
 ```
 
-For comparing the models WRT to performance, 
+For comparing the models WRT to performance, we evaluate the errors in 
+cross-validation mode.
 
 ```{r}
 #| label: mod-eval-1
